@@ -9,12 +9,29 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^9.1.1",
+    "axios": "^1.18.0",
+    "bcrypt": "^6.0.0",
+    "framer-motion": "^12.40.0",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.3.0",
     "next": "16.2.9",
+    "npm": "^11.17.0",
+    "pg": "^8.21.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-countup": "^6.5.3",
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.79.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
