@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import {
   Box,
   Container,
@@ -6,50 +7,55 @@ import {
   Grid,
   CircularProgress,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import ServicesCard from "./ServicesCard";
-import { Service } from "@/types/service";
+import ProjectCard from "./ProjectCard";
+import { Project } from "@/types/project";
+import { motion } from "framer-motion";
 
-export default function ServicesSection() {
-  const [services, setServices] = useState<Service[]>([]);
+export default function PortfolioSection() {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function fetchServices() {
+    const fetchProjects = async () => {
       try {
-        const response = await fetch("/api/services");
+        const response = await fetch("/api/projects");
+
         if (!response.ok) {
-          throw new Error("Failed to fetch services");
+          throw new Error("Failed to load projects");
         }
+
         const data = await response.json();
-        setServices(data);
+
+        setProjects(data);
       } catch {
-        setError(
-          "Something went wrong while loading services. Please try again later.",
-        );
+        setError("Something went wrong");
       } finally {
         setLoading(false);
       }
-    }
-    fetchServices();
+    };
+    fetchProjects();
   }, []);
 
   return (
     <Box
-      component="section"
+      component={motion.section}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 1 }}
       sx={{
-        py: 10,
+        py: 8,
         backgroundColor: "#fafafa",
       }}
     >
-      <Container maxWidth="lg">
+      <Container>
         <Typography
           variant="h2"
           component="h2"
-          sx={{ textAlign: "center", mb: 6, color: "primary.main",fontWeight:"bold" }}
+          sx={{ textAlign: "center", mb: 6, color: "primary.main", fontWeight:"bold"}}
         >
-          Our Services
+          Our Portfolio
         </Typography>
 
         {loading && (
@@ -65,9 +71,9 @@ export default function ServicesSection() {
 
         {!loading && !error && (
           <Grid container spacing={4}>
-            {services.map((service) => (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={service.id}>
-                <ServicesCard service={service} />
+            {projects.map((project) => (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={project.id}>
+                <ProjectCard project={project} />
               </Grid>
             ))}
           </Grid>

@@ -1,4 +1,4 @@
-"use client";
+
 import { Card, CardContent, Typography } from "@mui/material";
 import { Service } from "@/types/service";
 
