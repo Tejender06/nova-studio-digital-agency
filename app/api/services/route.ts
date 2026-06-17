@@ -18,6 +18,7 @@ export async function GET() {
     return NextResponse.json(
       {
         message: "Failed to load services",
+        error: String(error),
       },
       {
         status: 500,

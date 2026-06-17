@@ -23,6 +23,7 @@ export async function POST(request: Request) {
       {
         success: false,
         error: String(error),
+        message: String(error),
       },
       {
         status: 500,

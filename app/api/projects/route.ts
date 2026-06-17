@@ -17,6 +17,7 @@ export async function GET() {
     return NextResponse.json(
       {
         message: "Failed to fetch projects",
+        error: String(error),
       },
       {
         status: 500,
