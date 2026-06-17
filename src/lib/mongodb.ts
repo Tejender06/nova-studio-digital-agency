@@ -1,7 +1,11 @@
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI!;
-const dbName = process.env.MONGODB_DB!;
+const uri = process.env.MONGODB_URI || "";
+const dbName = process.env.MONGODB_DB || "";
+
+if (!uri || !dbName) {
+  console.warn("MONGODB_URI or MONGODB_DB is missing. Analytics will fail.");
+}
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;

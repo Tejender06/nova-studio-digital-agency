@@ -21,8 +21,11 @@ export default function ContactList() {
     async function loadContacts() {
       try {
         const response = await fetch("/api/contacts");
+        if (!response.ok) throw new Error("Failed to load");
         const data = await response.json();
-        setContacts(data);
+        if (Array.isArray(data)) {
+          setContacts(data);
+        }
       } catch (error) {
         console.log(error);
       } finally {

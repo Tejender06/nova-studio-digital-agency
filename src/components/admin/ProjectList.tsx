@@ -22,17 +22,31 @@ export default function ProjectList({
 
   useEffect(() => {
     async function loadProjects() {
-      const response = await fetch("/api/projects");
-      const data = await response.json();
-      setProjects(data);
+      try {
+        const response = await fetch("/api/projects");
+        if (!response.ok) throw new Error("Failed to load");
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setProjects(data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
     }
     loadProjects();
   }, [refresh]);
 
   async function fetchProjects() {
-    const response = await fetch("/api/projects");
-    const data = await response.json();
-    setProjects(data);
+    try {
+      const response = await fetch("/api/projects");
+      if (!response.ok) throw new Error("Failed to load");
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setProjects(data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   async function deleteProject(
