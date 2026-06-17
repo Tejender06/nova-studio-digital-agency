@@ -1,9 +1,35 @@
 "use client";
 
+import Link from "next/link";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 
 export default function HeroSection() {
+  const handleStartProject = async () => {
+    try {
+      await fetch("/api/analytics", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          event: "cta_click",
+          page: "/",
+        }),
+      });
+    } catch (error) {
+      console.error("Analytics Error:", error);
+    }
+
+    const contactSection = document.getElementById("contact");
+
+    if (contactSection) {
+      contactSection.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <Box
       component="section"
@@ -17,12 +43,8 @@ export default function HeroSection() {
       <Container maxWidth="lg">
         <Box
           component={motion.div}
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{
             duration: 0.8,
             ease: "easeOut",
@@ -49,7 +71,6 @@ export default function HeroSection() {
               lineHeight: 1.1,
               mb: 3,
               color: "text.primary",
-
               fontSize: {
                 xs: "2.5rem",
                 md: "4rem",
@@ -64,7 +85,6 @@ export default function HeroSection() {
               color: "text.secondary",
               mb: 5,
               lineHeight: 1.8,
-
               fontSize: {
                 xs: "1rem",
                 md: "1.2rem",
@@ -73,29 +93,54 @@ export default function HeroSection() {
           >
             We design modern websites, build high performance frontend
             applications, and create powerful brand identities for businesses
-            that want to stand out online
+            that want to stand out online.
           </Typography>
 
-          <Button
-            variant="contained"
-            size="large"
-            aria-label="Start a Project with Nova Studio"
+          <Box
             sx={{
-              px: 4,
-              py: 1.5,
-              borderRadius: "12px",
-              textTransform: "none",
-              fontWeight: 600,
-              fontSize: "1rem",
-              transition: "all 0.3s ease",
-
-              "&:hover": {
-                transform: "scale(1.05)",
-              },
+              display: "flex",
+              gap: 2,
+              flexWrap: "wrap",
             }}
           >
-            Start a Project
-          </Button>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={handleStartProject}
+              aria-label="Start a Project with Nova Studio"
+              sx={{
+                px: 4,
+                py: 1.5,
+                borderRadius: "12px",
+                textTransform: "none",
+                fontWeight: 600,
+                fontSize: "1rem",
+
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
+              }}
+            >
+              Start a Project
+            </Button>
+
+            <Button
+              component={Link}
+              href="/admin/login"
+              variant="outlined"
+              size="large"
+              sx={{
+                px: 4,
+                py: 1.5,
+                borderRadius: "12px",
+                textTransform: "none",
+                fontWeight: 600,
+                fontSize: "1rem",
+              }}
+            >
+              Admin Login
+            </Button>
+          </Box>
         </Box>
       </Container>
     </Box>

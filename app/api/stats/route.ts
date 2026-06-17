@@ -3,9 +3,9 @@ import { query } from "@/lib/db";
 
 export async function GET() {
   try {
-    // Get all services from PostgreSQL
+    // Get statistics from PostgreSQL
     const result = await query(
-      "SELECT * FROM services ORDER BY id"
+      "SELECT * FROM stats ORDER BY id"
     );
 
     return NextResponse.json(result.rows, {
@@ -16,7 +16,7 @@ export async function GET() {
 
     return NextResponse.json(
       {
-        message: "Failed to load services",
+        message: "Failed to fetch statistics",
       },
       {
         status: 500,
