@@ -35,14 +35,12 @@ export async function POST(request: Request) {
         status: 401,
       }
     );
-  } catch {
+  } catch (error) {
+    console.error(error);
+
     return NextResponse.json(
-      {
-        message: "Server error",
-      },
-      {
-        status: 500,
-      }
+      { error: "Internal Server Error" },
+      { status: 500 }
     );
   }
 }

@@ -1,31 +1,10 @@
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI || "";
-const dbName = process.env.MONGODB_DB || "";
-
-if (!uri || !dbName) {
-  console.warn("MONGODB_URI or MONGODB_DB is missing. Analytics will fail.");
-}
-
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
-
-if (process.env.NODE_ENV === "development") {
-  const globalWithMongo = global as typeof globalThis & {
-    _mongoClientPromise?: Promise<MongoClient>;
-  };
-
-  if (!globalWithMongo._mongoClientPromise) {
-    client = new MongoClient(uri);
-    globalWithMongo._mongoClientPromise = client.connect();
-  }
-  clientPromise = globalWithMongo._mongoClientPromise;
-} else {
-  client = new MongoClient(uri);
-  clientPromise = client.connect();
-}
+const client = new MongoClient(process.env.MONGODB_URI!);
 
 export async function getDatabase() {
-  const connectedClient = await clientPromise;
-  return connectedClient.db(dbName);
+  await client.connect();
+  return client.db(process.env.MONGODB_DB || "");
 }
+
+export default client;

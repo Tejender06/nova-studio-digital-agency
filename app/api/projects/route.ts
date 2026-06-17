@@ -12,16 +12,11 @@ export async function GET() {
 
     return NextResponse.json(result.rows);
   } catch (error) {
-    console.error("Error fetching projects:", error);
+    console.error(error);
 
     return NextResponse.json(
-      {
-        message: "Failed to fetch projects",
-        error: String(error),
-      },
-      {
-        status: 500,
-      }
+      { error: "Internal Server Error" },
+      { status: 500 }
     );
   }
 }
@@ -77,16 +72,11 @@ export async function POST(request: Request) {
       }
     );
   } catch (error) {
-    console.error("Error creating project:", error);
+    console.error(error);
 
     return NextResponse.json(
-      {
-        message: "Failed to create project",
-      },
-      {
-        status: 500,
-      }
+      { error: "Internal Server Error" },
+      { status: 500 }
     );
   }
 }
-

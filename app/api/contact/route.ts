@@ -60,17 +60,11 @@ export async function POST(request: Request) {
       }
     );
   } catch (error) {
-    console.error("Contact form error:", error);
+    console.error(error);
 
     return NextResponse.json(
-      {
-        success: false,
-        message: "Something went wrong",
-      },
-      {
-        status: 500,
-      }
+      { error: "Internal Server Error" },
+      { status: 500 }
     );
   }
 }
-

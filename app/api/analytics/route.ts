@@ -8,9 +8,9 @@ export async function POST(request: Request) {
     const db = await getDatabase();
 
     await db.collection("analytics").insertOne({
-      event: body.event,
+      eventType: body.event || body.eventType,
       page: body.page,
-      createdAt: new Date(),
+      timestamp: new Date(),
     });
 
     return NextResponse.json({
@@ -20,14 +20,26 @@ export async function POST(request: Request) {
     console.error(error);
 
     return NextResponse.json(
-      {
-        success: false,
-        error: String(error),
-        message: String(error),
-      },
-      {
-        status: 500,
-      }
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET() {
+  try {
+    const db = await getDatabase();
+    const count = await db.collection("analytics").countDocuments();
+
+    return NextResponse.json({
+      count,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
     );
   }
 }

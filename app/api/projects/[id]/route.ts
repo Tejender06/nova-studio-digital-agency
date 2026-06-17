@@ -49,12 +49,8 @@ export async function DELETE(
     console.error(error);
 
     return NextResponse.json(
-      {
-        message: "Failed to delete project",
-      },
-      {
-        status: 500,
-      }
+      { error: "Internal Server Error" },
+      { status: 500 }
     );
   }
 }

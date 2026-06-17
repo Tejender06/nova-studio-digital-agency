@@ -25,23 +25,18 @@ export async function GET() {
         name,
         email,
         message,
-        created_at
+        created_at as "createdAt"
       FROM contacts
       ORDER BY created_at DESC
     `);
 
     return NextResponse.json(result.rows);
   } catch (error) {
-    console.error("Error fetching contacts:", error);
+    console.error(error);
 
     return NextResponse.json(
-      {
-        message: "Failed to fetch contacts",
-      },
-      {
-        status: 500,
-      }
+      { error: "Internal Server Error" },
+      { status: 500 }
     );
   }
 }
-
