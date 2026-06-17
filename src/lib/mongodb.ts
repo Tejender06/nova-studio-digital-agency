@@ -1,8 +1,13 @@
 import { MongoClient } from "mongodb";
 
-const client = new MongoClient(process.env.MONGODB_URI!);
+// Prevent top-level crash if env variable is missing on Vercel
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017";
+const client = new MongoClient(uri);
 
 export async function getDatabase() {
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI is not set");
+  }
   await client.connect();
   return client.db(process.env.MONGODB_DB || "");
 }
