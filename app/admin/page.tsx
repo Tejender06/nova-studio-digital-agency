@@ -1,8 +1,7 @@
 "use client";
 
 import { Box, Container, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 import ContactList from "@/components/admin/ContactList";
@@ -10,17 +9,7 @@ import AddProjectForm from "@/components/admin/AddProjectForm";
 import ProjectList from "@/components/admin/ProjectList";
 
 export default function AdminPage() {
-  const router = useRouter();
-
   const [refresh, setRefresh] = useState(0);
-
-  useEffect(() => {
-    const isAdmin = localStorage.getItem("isAdmin");
-
-    if (isAdmin !== "true") {
-      router.replace("/admin/login");
-    }
-  }, [router]);
 
   return (
     <Container maxWidth="lg">
@@ -28,11 +17,7 @@ export default function AdminPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <Box
-          sx={{
-            py: 6,
-          }}
-        >
+        <Box sx={{ py: 6 }}>
           <Typography
             variant="h3"
             sx={{
@@ -44,19 +29,11 @@ export default function AdminPage() {
             Admin Dashboard
           </Typography>
 
-          <Box
-            sx={{
-              mb: 6,
-            }}
-          >
+          <Box sx={{ mb: 6 }}>
             <ContactList />
           </Box>
 
-          <Box
-            sx={{
-              mb: 6,
-            }}
-          >
+          <Box sx={{ mb: 6 }}>
             <AddProjectForm
               onProjectAdded={() =>
                 setRefresh((prev) => prev + 1)

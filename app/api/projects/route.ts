@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
+import { isAuthenticated } from "@/lib/auth";
 
+// Get all projects (public)
 export async function GET() {
   try {
     const result = await query(
@@ -9,7 +11,7 @@ export async function GET() {
 
     return NextResponse.json(result.rows);
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching projects:", error);
 
     return NextResponse.json(
       {
@@ -24,12 +26,28 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const authenticated = await isAuthenticated();
+
+    if (!authenticated) {
+      return NextResponse.json(
+        {
+          message: "Unauthorized",
+        },
+        {
+          status: 401,
+        }
+      );
+    }
+
     const body = await request.json();
 
     const { title, category, image } = body;
 
-    // Simple validation
-    if (!title || !category || !image) {
+    if (
+      !title?.trim() ||
+      !category?.trim() ||
+      !image?.trim()
+    ) {
       return NextResponse.json(
         {
           message: "All fields are required",
@@ -57,7 +75,7 @@ export async function POST(request: Request) {
       }
     );
   } catch (error) {
-    console.error(error);
+    console.error("Error creating project:", error);
 
     return NextResponse.json(
       {
@@ -69,3 +87,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

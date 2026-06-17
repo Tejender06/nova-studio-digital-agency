@@ -1,26 +1,48 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const body = await request.json();
+  try {
+    const body = await request.json();
 
-  const { username, password } = body;
+    const { username, password } = body;
 
-  if (
-    username === "admin" &&
-    password === "admin123"
-  ) {
-    return NextResponse.json({
-      success: true,
-    });
-  }
+    if (
+      username === process.env.ADMIN_USERNAME &&
+      password === process.env.ADMIN_PASSWORD
+    ) {
+      const cookieStore = await cookies();
 
-  return NextResponse.json(
-    {
-      success: false,
-      message: "Invalid credentials",
-    },
-    {
-      status: 401,
+      cookieStore.set("admin_session", "authenticated", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+        maxAge: 60 * 60 * 24,
+      });
+
+      return NextResponse.json({
+        success: true,
+      });
     }
-  );
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Invalid credentials",
+      },
+      {
+        status: 401,
+      }
+    );
+  } catch {
+    return NextResponse.json(
+      {
+        message: "Server error",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
 }

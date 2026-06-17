@@ -7,12 +7,29 @@ export async function POST(request: Request) {
 
     const { name, email, message } = body;
 
-    // Basic validation
-    if (!name || !email || !message) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (
+      !name?.trim() ||
+      !email?.trim() ||
+      !message?.trim()
+    ) {
       return NextResponse.json(
         {
           success: false,
           message: "All fields are required",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Please enter a valid email address",
         },
         {
           status: 400,
@@ -26,7 +43,11 @@ export async function POST(request: Request) {
       (name, email, message)
       VALUES ($1, $2, $3)
       `,
-      [name, email, message]
+      [
+        name.trim(),
+        email.trim(),
+        message.trim(),
+      ]
     );
 
     return NextResponse.json(
@@ -39,7 +60,7 @@ export async function POST(request: Request) {
       }
     );
   } catch (error) {
-    console.error(error);
+    console.error("Contact form error:", error);
 
     return NextResponse.json(
       {
@@ -52,3 +73,4 @@ export async function POST(request: Request) {
     );
   }
 }
+
