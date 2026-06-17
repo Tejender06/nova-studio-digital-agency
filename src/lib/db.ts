@@ -1,12 +1,16 @@
 import { Pool } from "pg";
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const globalForPg = global as unknown as { pool: Pool };
 
-export async function query(
-  text: string,
-  params?: any[]
-) {
+export const pool =
+  globalForPg.pool ||
+  new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : undefined,
+  });
+
+if (process.env.NODE_ENV !== "production") globalForPg.pool = pool;
+
+export async function query(text: string, params?: unknown[]) {
   return pool.query(text, params);
 }

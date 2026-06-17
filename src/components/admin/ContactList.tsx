@@ -18,25 +18,19 @@ export default function ContactList() {
     useState(true);
 
   useEffect(() => {
-    fetchContacts();
-  }, []);
-
-  async function fetchContacts() {
-    try {
-      const response = await fetch(
-        "/api/contacts"
-      );
-
-      const data =
-        await response.json();
-
-      setContacts(data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+    async function loadContacts() {
+      try {
+        const response = await fetch("/api/contacts");
+        const data = await response.json();
+        setContacts(data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     }
-  }
+    loadContacts();
+  }, []);
 
   if (loading) {
     return <CircularProgress />;

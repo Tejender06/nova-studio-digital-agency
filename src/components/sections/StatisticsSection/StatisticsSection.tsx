@@ -28,7 +28,7 @@ export default function StatisticsSection() {
         const data = await response.json();
 
         setStats(data);
-      } catch (error) {
+      } catch {
         setError("Unable to load statistics");
       } finally {
         setLoading(false);

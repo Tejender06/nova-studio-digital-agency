@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
-    // Get statistics from PostgreSQL
     const result = await query(
       "SELECT * FROM stats ORDER BY id"
     );

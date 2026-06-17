@@ -21,16 +21,17 @@ export default function ProjectList({
     useState<Project[]>([]);
 
   useEffect(() => {
-    fetchProjects();
+    async function loadProjects() {
+      const response = await fetch("/api/projects");
+      const data = await response.json();
+      setProjects(data);
+    }
+    loadProjects();
   }, [refresh]);
 
   async function fetchProjects() {
-    const response = await fetch(
-      "/api/projects"
-    );
-
+    const response = await fetch("/api/projects");
     const data = await response.json();
-
     setProjects(data);
   }
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
+import { isAuthenticated } from "@/lib/auth";
 
 export async function DELETE(
   request: Request,
@@ -10,6 +11,15 @@ export async function DELETE(
   }
 ) {
   try {
+    const authenticated = await isAuthenticated();
+
+    if (!authenticated) {
+      return NextResponse.json(
+        { message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const { id } = await context.params;
 
     const result = await query(
